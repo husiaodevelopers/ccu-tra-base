@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/test")
 public class testController {
 
-    @ApiOperation(value = "test", notes = "test用")
+    @ApiOperation(value = "test")
     @GetMapping("/hi")
     public String addAccount() {
         return "hi ccu-tra-base";
