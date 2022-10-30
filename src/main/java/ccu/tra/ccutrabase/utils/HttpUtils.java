@@ -7,6 +7,7 @@ import com.alibaba.fastjson.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHeaders;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -17,41 +18,29 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-
+@Slf4j
+@Component
 public class HttpUtils {
 
-    @Value("${tdx.client.id}")
-    private static String CLIENTID;
-    @Value("${tdx.client.secret}")
-    private static String CLIENTSECRET;
-
-    public static String doHttpGet(String url) throws Exception{
+    public static String doHttpGet(String url,String accessToken) throws Exception{
 
         try {
-            List<NameValuePair> tokenParams = new ArrayList<>();
             Map<String,String> headers = new HashMap<>();
-            tokenParams.add(new BasicNameValuePair("grant_type", "client_credentials"));
-            tokenParams.add(new BasicNameValuePair("client_id",CLIENTID)); //your clientId
-            tokenParams.add(new BasicNameValuePair("client_secret",CLIENTSECRET)); //your clientSecret
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            String tokenInfo = postJsonString(Constants.tokenUrl, tokenParams);
-            JsonNode tokenElem = objectMapper.readTree(tokenInfo);
-
-            String accessToken = tokenElem.get("access_token").asText();
+            log.info(" accessToken " +accessToken);
             headers.put("authorization", String.format("Bearer %s", accessToken));
             String resultJson = getJsonString(url, headers);
             System.out.println(resultJson);
             return resultJson;
         } catch (Exception e) {
+            log.info(e.toString());
             throw new RuntimeException(e);
         }
     }
@@ -80,6 +69,30 @@ public class HttpUtils {
              InputStream content = response.getEntity().getContent();) {
 //			System.out.println("ResponseStatus：" + response.getStatusLine().getStatusCode());
             return EntityUtils.toString(response.getEntity());
+        }
+    }
+
+    public static String getAccessToken(String clientId,String clientSecret){
+        try {
+            List<NameValuePair> tokenParams = new ArrayList<>();
+            tokenParams.add(new BasicNameValuePair("grant_type", Constants.grant_type));
+            tokenParams.add(new BasicNameValuePair("client_id",clientId));
+            tokenParams.add(new BasicNameValuePair("client_secret",clientSecret));
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            String tokenInfo = null;
+            log.info(" client_id " +clientId);
+            log.info(" client_secret " +clientSecret);
+            tokenInfo = postJsonString(Constants.tokenUrl, tokenParams);
+
+            log.info(" tokenInfo " +tokenInfo.toString());
+            JsonNode tokenElem = objectMapper.readTree(tokenInfo);
+
+            String accessToken = tokenElem.get("access_token").asText();
+            return accessToken;
+        } catch (Exception e) {
+            return null;
+
         }
     }
 

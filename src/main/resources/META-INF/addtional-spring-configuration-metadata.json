@@ -1,0 +1,12 @@
+{
+  "properties": [
+    {
+      "name": "tdx.client.id",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "tdx.client.secret",
+      "type": "java.lang.String"
+    }
+  ]
+}
