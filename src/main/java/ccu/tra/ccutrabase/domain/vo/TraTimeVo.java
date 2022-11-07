@@ -6,8 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.sql.Timestamp;
 
 @Data
 @Builder
@@ -15,7 +13,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 public class TraTimeVo implements Serializable {
 
-
+    private static final long serialVersionUID = 1L;
     /**
      * 挑選
      */
