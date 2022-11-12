@@ -9,6 +9,9 @@ import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
 
+/**
+ * @author Hu
+ */
 @Slf4j
 @Component
 public class AccessTokenUtils {
@@ -20,7 +23,7 @@ public class AccessTokenUtils {
     @Autowired
     private TdxAuthorizationService tdxAuthorizationService;
 
-    public  String getAccessToken(){
+    public String getAccessToken(){
         // getAccessToken
         TdxAuthorizationPo tdxAuthorizationPo = tdxAuthorizationService.getAccessToken();
         String accessToken = null;
@@ -28,7 +31,7 @@ public class AccessTokenUtils {
         if((tdxAuthorizationPo.getExpiresDate().getTime()-now.getTime() )>=0){
             return tdxAuthorizationPo.getAccessToken();
         }else{
-            return HttpUtils.getAccessToken(clientId,clientSecret);
+            return tdxAuthorizationService.getAccessTokenFromTdx();
         }
     }
 }

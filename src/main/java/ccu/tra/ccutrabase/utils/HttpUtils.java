@@ -37,7 +37,7 @@ public class HttpUtils {
             log.info(" accessToken " +accessToken);
             headers.put("authorization", accessToken);
             String resultJson = getJsonString(url, headers);
-            System.out.println(resultJson);
+            //System.out.println(resultJson);
             return resultJson;
         } catch (Exception e) {
             log.info(e.toString());
