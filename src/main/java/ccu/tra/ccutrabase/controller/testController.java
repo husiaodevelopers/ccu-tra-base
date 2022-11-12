@@ -27,4 +27,11 @@ public class testController {
 
         return tdxAuthorizationService.getAccessToken();
     }
+
+    @ApiOperation(value = "getAccessTokenFromTdx")
+    @GetMapping("/getAccessTokenFromTdx")
+    public String getAccessTokenFromTdx() {
+
+        return tdxAuthorizationService.getAccessTokenFromTdx();
+    }
 }

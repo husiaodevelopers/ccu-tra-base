@@ -35,7 +35,7 @@ public class HttpUtils {
         try {
             Map<String,String> headers = new HashMap<>();
             log.info(" accessToken " +accessToken);
-            headers.put("authorization", String.format("Bearer %s", accessToken));
+            headers.put("authorization", accessToken);
             String resultJson = getJsonString(url, headers);
             System.out.println(resultJson);
             return resultJson;
@@ -87,9 +87,7 @@ public class HttpUtils {
 
             log.info(" tokenInfo " +tokenInfo.toString());
             JsonNode tokenElem = objectMapper.readTree(tokenInfo);
-
-            String accessToken = tokenElem.get("access_token").asText();
-            return accessToken;
+            return String.format("Bearer %s", tokenElem.get("access_token").asText());
         } catch (Exception e) {
             return null;
 
