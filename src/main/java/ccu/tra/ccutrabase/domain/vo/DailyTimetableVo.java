@@ -1,5 +1,6 @@
 package ccu.tra.ccutrabase.domain.vo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,14 +18,14 @@ public class DailyTimetableVo implements Serializable {
     public interface List {}
 
     private static final long serialVersionUID = 1L;
-    @ApiModelProperty(value = "起點車站代碼", required = true)
     @NotNull(message = "起點車站代碼", groups = {DailyTimetableVo.List.class})
+    @JsonProperty(value = "OriginStationID")
     private String OriginStationID;
-    @ApiModelProperty(value = "迄點車站代碼", required = true)
     @NotNull(message = "迄點車站代碼", groups = {DailyTimetableVo.List.class})
+    @JsonProperty(value = "DestinationStationID")
     private String DestinationStationID;
-    @ApiModelProperty(value = "欲查詢的日期(格式: yyyy-MM-dd)", required = true)
     @NotNull(message = "欲查詢的日期(格式: yyyy-MM-dd)", groups = {DailyTimetableVo.List.class})
+    @JsonProperty(value = "TrainDate")
     private String TrainDate;
 
     /**
