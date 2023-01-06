@@ -31,7 +31,7 @@ import java.util.*;
 public class HttpUtils {
 
     public static String doHttpGet(String url,String accessToken) throws Exception{
-
+        log.info(" url : " +url);
         try {
             Map<String,String> headers = new HashMap<>();
             log.info(" accessToken " +accessToken);
@@ -54,7 +54,8 @@ public class HttpUtils {
              CloseableHttpResponse response = httpClient.execute(httpGet);
              InputStream content = response.getEntity().getContent();
              BufferedReader reader = new BufferedReader(new InputStreamReader(content, StandardCharsets.UTF_8))) {
-//			System.out.println("ResponseStatus：" + response.getStatusLine().getStatusCode());
+             log.info("ResponseStatus：" + response.getStatusLine().getStatusCode());
+            System.out.println("EntityUtils.toString(response.getEntity())：" + EntityUtils.toString(response.getEntity()));
             return EntityUtils.toString(response.getEntity());
         }
     }

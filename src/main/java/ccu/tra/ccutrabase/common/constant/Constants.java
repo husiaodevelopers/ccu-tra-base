@@ -8,6 +8,7 @@ public class Constants {
     
     public interface TDX_DailyTimetable {
         String Today = "DailyTimetable/Today";
+        String ODToTrainDate = "DailyTimetable/OD/";
     }
     public interface TimestampOfDate {
         long oneDay = 24 * 3600 * 1000;

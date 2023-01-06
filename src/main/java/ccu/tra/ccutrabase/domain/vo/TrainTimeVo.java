@@ -1,5 +1,6 @@
 package ccu.tra.ccutrabase.domain.vo;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +12,7 @@ import java.io.Serializable;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TraTimeVo implements Serializable {
+public class TrainTimeVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
     /**
@@ -41,5 +42,6 @@ public class TraTimeVo implements Serializable {
     /**
      * 指定來源格式
      */
+    @ApiModelProperty(value = "指定來源格式", required = true)
     private String format;
 }
