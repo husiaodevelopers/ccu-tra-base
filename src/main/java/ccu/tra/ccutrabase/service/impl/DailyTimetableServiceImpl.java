@@ -35,7 +35,7 @@ public class DailyTimetableServiceImpl implements DailyTimetableService {
         return HttpUtils.doHttpGet(Constants.tdxUrl_v2 + Constants.TDX_DailyTimetable.Today+"?"+params,accessToken);
     }
     @Override
-    public String queryByODAndTrainDate(DailyTimetableVo dailyTimetableVo)  {
+    public List<ODAndTrainDateTimetablePo> queryByODAndTrainDate(DailyTimetableVo dailyTimetableVo)  {
         String jsonObject = JSON.toJSONString(dailyTimetableVo);
         // getAccessToken
         String accessToken = accessTokenUtils.getAccessToken();
@@ -67,11 +67,11 @@ public class DailyTimetableServiceImpl implements DailyTimetableService {
                     odAndTrainDateTimetablePo.setStartingStationID(dailyTrainobj.getString("StartingStationID"));
                 }
                 if(dailyTrainobj.containsKey("StartingStationName")){
-                    JSONObject StartingStationName = JSONObject.parseObject(obj.getString("StartingStationName"));
-                    if(dailyTrainobj.containsKey("Zh_tw")){
+                    JSONObject StartingStationName = JSONObject.parseObject(dailyTrainobj.getString("StartingStationName"));
+                    if(StartingStationName.containsKey("Zh_tw")){
                         odAndTrainDateTimetablePo.setStartingStationNameZh(StartingStationName.getString("Zh_tw"));
                     }
-                    if(dailyTrainobj.containsKey("En")){
+                    if(StartingStationName.containsKey("En")){
                         odAndTrainDateTimetablePo.setStartingStationNameEn(StartingStationName.getString("En"));
                     }
                 }
@@ -79,11 +79,11 @@ public class DailyTimetableServiceImpl implements DailyTimetableService {
                     odAndTrainDateTimetablePo.setEndingStationID(dailyTrainobj.getString("EndingStationID"));
                 }
                 if(dailyTrainobj.containsKey("EndingStationName")){
-                    JSONObject EndingStationName = JSONObject.parseObject(obj.getString("EndingStationName"));
-                    if(dailyTrainobj.containsKey("Zh_tw")){
+                    JSONObject EndingStationName = JSONObject.parseObject(dailyTrainobj.getString("EndingStationName"));
+                    if(EndingStationName.containsKey("Zh_tw")){
                         odAndTrainDateTimetablePo.setEndingStationNameZh(EndingStationName.getString("Zh_tw"));
                     }
-                    if(dailyTrainobj.containsKey("En")){
+                    if(EndingStationName.containsKey("En")){
                         odAndTrainDateTimetablePo.setEndingStationNameEn(EndingStationName.getString("En"));
                     }
                 }
@@ -91,11 +91,11 @@ public class DailyTimetableServiceImpl implements DailyTimetableService {
                     odAndTrainDateTimetablePo.setTrainTypeID(dailyTrainobj.getString("TrainTypeID"));
                 }
                 if(dailyTrainobj.containsKey("TrainTypeName")){
-                    JSONObject TrainTypeName = JSONObject.parseObject(obj.getString("TrainTypeName"));
-                    if(dailyTrainobj.containsKey("Zh_tw")){
+                    JSONObject TrainTypeName = JSONObject.parseObject(dailyTrainobj.getString("TrainTypeName"));
+                    if(TrainTypeName.containsKey("Zh_tw")){
                         odAndTrainDateTimetablePo.setTrainTypeNameZh(TrainTypeName.getString("Zh_tw"));
                     }
-                    if(dailyTrainobj.containsKey("En")){
+                    if(TrainTypeName.containsKey("En")){
                         odAndTrainDateTimetablePo.setTrainTypeNameEn(TrainTypeName.getString("En"));
                     }
                 }
@@ -107,34 +107,47 @@ public class DailyTimetableServiceImpl implements DailyTimetableService {
             if(obj.containsKey("OriginStopTime")){
                 JSONObject originStopTimeobj = JSONObject.parseObject(obj.getString("OriginStopTime"));
                 if(originStopTimeobj.containsKey("StationID")){
-                    odAndTrainDateTimetablePo.setTrainTypeID(originStopTimeobj.getString("TrainTypeID"));
+                    odAndTrainDateTimetablePo.setOriginStationID(originStopTimeobj.getString("StationID"));
                 }
-                if(originStopTimeobj.containsKey("StartingStationName")){
-                    JSONObject StartingStationName = JSONObject.parseObject(obj.getString("StartingStationName"));
-                    if(originStopTimeobj.containsKey("Zh_tw")){
-                        odAndTrainDateTimetablePo.setStartingStationNameZh(StartingStationName.getString("Zh_tw"));
+                if(originStopTimeobj.containsKey("StationName")){
+                    JSONObject StationName = JSONObject.parseObject(originStopTimeobj.getString("StationName"));
+                    if(StationName.containsKey("Zh_tw")){
+                        odAndTrainDateTimetablePo.setOriginStationNameZh(StationName.getString("Zh_tw"));
                     }
-                    if(originStopTimeobj.containsKey("En")){
-                        odAndTrainDateTimetablePo.setStartingStationNameEn(StartingStationName.getString("En"));
+                    if(StationName.containsKey("En")){
+                        odAndTrainDateTimetablePo.setOriginStationNameEn(StationName.getString("En"));
                     }
                 }
-
+                if(originStopTimeobj.containsKey("DepartureTime")){
+                    odAndTrainDateTimetablePo.setOriginStationDepartureTime(originStopTimeobj.getString("DepartureTime"));
+                }
             }
             /**
              * DestinationStopTime
              */
             if(obj.containsKey("DestinationStopTime")){
-                /*log.info("DestinationStopTime : ");
-                //JSONArray dailyTrainArr = obj.getJSONArray("DestinationStopTime");
-                //JSONObject obj1 = (JSONObject) dailyTrainArr.get(0);
-                log.info("obj3 : "+obj.toString());
-                log.info("obj3 : "+obj.getString("DestinationStopTime"));*/
+                JSONObject destinationStopTimeobj = JSONObject.parseObject(obj.getString("DestinationStopTime"));
+                if(destinationStopTimeobj.containsKey("StationID")){
+                    odAndTrainDateTimetablePo.setDestinationStationID(destinationStopTimeobj.getString("StationID"));
+                }
+                if(destinationStopTimeobj.containsKey("StationName")){
+                    JSONObject StationName = JSONObject.parseObject(destinationStopTimeobj.getString("StationName"));
+                    if(StationName.containsKey("Zh_tw")){
+                        odAndTrainDateTimetablePo.setDestinationStationNameZh(StationName.getString("Zh_tw"));
+                    }
+                    if(StationName.containsKey("En")){
+                        odAndTrainDateTimetablePo.setDestinationStationNameEn(StationName.getString("En"));
+                    }
+                }
+                if(destinationStopTimeobj.containsKey("ArrivalTime")){
+                    odAndTrainDateTimetablePo.setDestinationStationArrivalTime(destinationStopTimeobj.getString("ArrivalTime"));
+                }
             }
             odAndTrainDateTimetablePoList.add(odAndTrainDateTimetablePo);
         }
         /*for(int i= 0;i< odAndTrainDateTimetablePoList.size();i++){
             log.info("i = "+i+" : "+odAndTrainDateTimetablePoList.get(i).toString());
         }*/
-        return result;
+        return odAndTrainDateTimetablePoList;
     }
 }
