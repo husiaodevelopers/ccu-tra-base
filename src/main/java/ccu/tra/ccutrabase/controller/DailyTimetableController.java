@@ -38,6 +38,7 @@ public class DailyTimetableController {
     public String queryByODAndTrainDate(@RequestBody @Validated(DailyTimetableVo.List.class)  DailyTimetableVo dailyTimetableVo) {
         try {
             return dailyTimetableService.queryByODAndTrainDate(dailyTimetableVo);
+
         } catch (Exception e) {
             return e.getMessage();
         }
