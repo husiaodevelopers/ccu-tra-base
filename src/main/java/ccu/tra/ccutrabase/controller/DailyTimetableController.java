@@ -5,6 +5,8 @@ import ccu.tra.ccutrabase.domain.vo.DailyTimetableVo;
 import ccu.tra.ccutrabase.domain.vo.TrainTimeVo;
 import ccu.tra.ccutrabase.service.DailyTimetableService;
 import ccu.tra.ccutrabase.service.TdxAuthorizationService;
+import com.common.util.ResultUtil;
+import com.domian.Result;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.bridge.MessageUtil;
@@ -41,14 +43,14 @@ public class DailyTimetableController {
 
     @ApiOperation(value = "取得指定[日期],[起迄站間]之站間時刻表資料")
     @PostMapping("/queryByODAndTrainDate")
-    public List<ODAndTrainDateTimetablePo> queryByODAndTrainDate(@RequestBody @Validated(DailyTimetableVo.List.class)  DailyTimetableVo dailyTimetableVo) {
+    public Result<List<ODAndTrainDateTimetablePo>> queryByODAndTrainDate(@RequestBody @Validated(DailyTimetableVo.List.class)  DailyTimetableVo dailyTimetableVo) {
+        String errmsg;
         try {
-            return dailyTimetableService.queryByODAndTrainDate(dailyTimetableVo);
-
+            return ResultUtil.success(dailyTimetableService.queryByODAndTrainDate(dailyTimetableVo));
         } catch (Exception e) {
             log.info(e.getMessage());
-
+            errmsg = e.getMessage();
         }
-        return null;
+        return ResultUtil.error(errmsg);
     }
 }
