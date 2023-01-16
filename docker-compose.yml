@@ -1,0 +1,46 @@
+version: '2'
+
+# Service
+services:
+  # Database MySQL
+  app-db:
+    image: mysql:8.0.13
+    container_name: app-db
+    #restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: tra_system
+      MYSQL_USER: ccutrauser
+      MYSQL_PASSWORD: ccutrauser
+    ports:
+      - "3306:3306"
+    networks:
+      - app-server-network
+  # APP Server
+  app-server:
+    depends_on:
+      - app-db
+    image: java_springboot:2.6.12
+    build:
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://app-db:3306/tra_system?autoReconnect=true&useSSL=false
+    #environment: # Pass environment variables to the service
+      DATASOURCE_HOST: app-db
+      DATASOURCE_POST: 3306
+      DATASOURCE_NAME: tra_system
+      DATASOURCE_USERNAME: ccutrauser
+      DATASOURCE_PASSWORD: ccutrauser
+    networks:
+      - app-server-network
+
+
+# Volume
+volumes:
+  mysql-data:
+
+# Network
+networks:
+  app-server-network:
