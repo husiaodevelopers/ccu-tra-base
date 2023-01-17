@@ -26,7 +26,7 @@ services:
     ports:
       - "8081:8081"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://app-db:3306/tra_system?autoReconnect=true&useSSL=false
+      SPRING_DATASOURCE_URL: jdbc:mysql://app-db:3306/tra_system?autoReconnect=true&useSSL=false&serverTimezone=GMT%2B8
     #environment: # Pass environment variables to the service
       DATASOURCE_HOST: app-db
       DATASOURCE_POST: 3306
