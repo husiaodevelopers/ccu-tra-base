@@ -10,6 +10,7 @@ import ccu.tra.ccutrabase.utils.HttpUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,7 +37,14 @@ public class DailyTimetableServiceImpl implements DailyTimetableService {
     }
     @Override
     public List<ODAndTrainDateTimetablePo> queryByODAndTrainDate(DailyTimetableVo dailyTimetableVo)  {
-        String jsonObject = JSON.toJSONString(dailyTimetableVo);
+        DailyTimetableVo paramsForTdx = new DailyTimetableVo();
+        if(ObjectUtils.isNotEmpty(dailyTimetableVo.getTop())){
+            paramsForTdx.setTop(dailyTimetableVo.getTop());
+        }
+        if(ObjectUtils.isNotEmpty(dailyTimetableVo.getFormat())){
+            paramsForTdx.setFormat(dailyTimetableVo.getFormat());
+        }
+        String jsonObject = JSON.toJSONString(paramsForTdx);
         // getAccessToken
         String accessToken = accessTokenUtils.getAccessToken();
         String params = HttpUtils.parseJsonToUrlParams(jsonObject);
