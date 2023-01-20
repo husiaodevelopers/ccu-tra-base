@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.sql.Date;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
 /**
  * @author Hu
@@ -28,7 +30,7 @@ public class AccessTokenUtils {
         TdxAuthorizationPo tdxAuthorizationPo = tdxAuthorizationService.getAccessToken();
         String accessToken = null;
         Timestamp now = new Timestamp(System.currentTimeMillis());
-        if((tdxAuthorizationPo.getExpiresDate().getTime()-now.getTime() )>=0){
+        if(tdxAuthorizationPo.getExpiresDate().after(now)){
             return tdxAuthorizationPo.getAccessToken();
         }else{
             return tdxAuthorizationService.getAccessTokenFromTdx();
