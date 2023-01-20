@@ -57,4 +57,10 @@ public class DailyTimetableVo implements Serializable {
      */
     @ApiModelProperty(value = "指定來源格式", required = true)
     private String format;
+
+    @NotNull(message = "欲查詢的開始時間(格式: yyyy-MM-dd HH:mm)", groups = {DailyTimetableVo.List.class})
+    private String departureStartTime;
+
+    @NotNull(message = "欲查詢的結束時間(格式: yyyy-MM-dd HH:mm)", groups = {DailyTimetableVo.List.class})
+    private String departureEndTime;
 }

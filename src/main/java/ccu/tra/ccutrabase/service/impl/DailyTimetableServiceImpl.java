@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,6 +62,68 @@ public class DailyTimetableServiceImpl implements DailyTimetableService {
         for(int i= 0;i< trainList.size();i++){
             ODAndTrainDateTimetablePo odAndTrainDateTimetablePo = new ODAndTrainDateTimetablePo();
             JSONObject obj = (JSONObject) trainList.get(i);
+            //火車出發時間
+            Timestamp trainStartTime = null;
+            //我要查詢的時間區間-頭
+            Timestamp myStartTime = null;
+            //我要查詢的時間區間-尾
+            Timestamp myEndTime = null;
+            /**
+             * OriginStopTime
+             */
+            if(obj.containsKey("OriginStopTime")){
+                JSONObject originStopTimeobj = JSONObject.parseObject(obj.getString("OriginStopTime"));
+                if(originStopTimeobj.containsKey("DepartureTime")){
+                    odAndTrainDateTimetablePo.setOriginStationDepartureTime(originStopTimeobj.getString("DepartureTime"));
+                }
+                //判斷有沒有在我們要查詢的時間範圍內
+                trainStartTime = Timestamp.valueOf(dailyTimetableVo.getTrainDate() +" "+odAndTrainDateTimetablePo.getOriginStationDepartureTime()+":00.0");
+                myStartTime = Timestamp.valueOf(dailyTimetableVo.getDepartureStartTime()+".0");
+                log.info("trainStartTime : "+trainStartTime);
+                log.info("myStartTime : "+myStartTime);
+                if(trainStartTime.before(myStartTime)){
+                    continue;
+                }
+                if(originStopTimeobj.containsKey("StationID")){
+                    odAndTrainDateTimetablePo.setOriginStationID(originStopTimeobj.getString("StationID"));
+                }
+                if(originStopTimeobj.containsKey("StationName")){
+                    JSONObject StationName = JSONObject.parseObject(originStopTimeobj.getString("StationName"));
+                    if(StationName.containsKey("Zh_tw")){
+                        odAndTrainDateTimetablePo.setOriginStationNameZh(StationName.getString("Zh_tw"));
+                    }
+                    if(StationName.containsKey("En")){
+                        odAndTrainDateTimetablePo.setOriginStationNameEn(StationName.getString("En"));
+                    }
+                }
+            }
+            /**
+             * DestinationStopTime
+             */
+            if(obj.containsKey("DestinationStopTime")){
+                JSONObject destinationStopTimeobj = JSONObject.parseObject(obj.getString("DestinationStopTime"));
+                if(destinationStopTimeobj.containsKey("ArrivalTime")){
+                    odAndTrainDateTimetablePo.setDestinationStationArrivalTime(destinationStopTimeobj.getString("ArrivalTime"));
+                }
+                //判斷有沒有在我們要查詢的時間範圍內
+                myEndTime = Timestamp.valueOf(dailyTimetableVo.getDepartureEndTime()+".0");
+                log.info("myEndTime : "+myEndTime);
+                if(trainStartTime.after(myEndTime)){
+                    continue;
+                }
+                if(destinationStopTimeobj.containsKey("StationID")){
+                    odAndTrainDateTimetablePo.setDestinationStationID(destinationStopTimeobj.getString("StationID"));
+                }
+                if(destinationStopTimeobj.containsKey("StationName")){
+                    JSONObject StationName = JSONObject.parseObject(destinationStopTimeobj.getString("StationName"));
+                    if(StationName.containsKey("Zh_tw")){
+                        odAndTrainDateTimetablePo.setDestinationStationNameZh(StationName.getString("Zh_tw"));
+                    }
+                    if(StationName.containsKey("En")){
+                        odAndTrainDateTimetablePo.setDestinationStationNameEn(StationName.getString("En"));
+                    }
+                }
+            }
             /**
              * DailyTrainInfo
              */
@@ -108,48 +171,6 @@ public class DailyTimetableServiceImpl implements DailyTimetableService {
                     }
                 }
 
-            }
-            /**
-             * OriginStopTime
-             */
-            if(obj.containsKey("OriginStopTime")){
-                JSONObject originStopTimeobj = JSONObject.parseObject(obj.getString("OriginStopTime"));
-                if(originStopTimeobj.containsKey("StationID")){
-                    odAndTrainDateTimetablePo.setOriginStationID(originStopTimeobj.getString("StationID"));
-                }
-                if(originStopTimeobj.containsKey("StationName")){
-                    JSONObject StationName = JSONObject.parseObject(originStopTimeobj.getString("StationName"));
-                    if(StationName.containsKey("Zh_tw")){
-                        odAndTrainDateTimetablePo.setOriginStationNameZh(StationName.getString("Zh_tw"));
-                    }
-                    if(StationName.containsKey("En")){
-                        odAndTrainDateTimetablePo.setOriginStationNameEn(StationName.getString("En"));
-                    }
-                }
-                if(originStopTimeobj.containsKey("DepartureTime")){
-                    odAndTrainDateTimetablePo.setOriginStationDepartureTime(originStopTimeobj.getString("DepartureTime"));
-                }
-            }
-            /**
-             * DestinationStopTime
-             */
-            if(obj.containsKey("DestinationStopTime")){
-                JSONObject destinationStopTimeobj = JSONObject.parseObject(obj.getString("DestinationStopTime"));
-                if(destinationStopTimeobj.containsKey("StationID")){
-                    odAndTrainDateTimetablePo.setDestinationStationID(destinationStopTimeobj.getString("StationID"));
-                }
-                if(destinationStopTimeobj.containsKey("StationName")){
-                    JSONObject StationName = JSONObject.parseObject(destinationStopTimeobj.getString("StationName"));
-                    if(StationName.containsKey("Zh_tw")){
-                        odAndTrainDateTimetablePo.setDestinationStationNameZh(StationName.getString("Zh_tw"));
-                    }
-                    if(StationName.containsKey("En")){
-                        odAndTrainDateTimetablePo.setDestinationStationNameEn(StationName.getString("En"));
-                    }
-                }
-                if(destinationStopTimeobj.containsKey("ArrivalTime")){
-                    odAndTrainDateTimetablePo.setDestinationStationArrivalTime(destinationStopTimeobj.getString("ArrivalTime"));
-                }
             }
             odAndTrainDateTimetablePoList.add(odAndTrainDateTimetablePo);
         }

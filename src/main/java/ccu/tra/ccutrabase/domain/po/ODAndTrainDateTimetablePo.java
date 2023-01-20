@@ -67,4 +67,5 @@ public class ODAndTrainDateTimetablePo implements Serializable {
     @JsonProperty(value = "destinationStationArrivalTime")
     private String destinationStationArrivalTime;
 
+
 }
