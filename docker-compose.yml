@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 
 # Service
 services:
@@ -9,22 +9,37 @@ services:
     security_opt:
       - seccomp:unconfined
     restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: 123456
-      MYSQL_DATABASE: tra_system
-      MYSQL_USER: ccutrauser
-      MYSQL_PASSWORD: ccutrauser
     ports:
       - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ccutrauser
     networks:
       - app-server-network
+    volumes:
+      - mysql-data:/var/lib/mysql
+  # Redis
+  app-redis:
+    image: redis:3.0
+    container_name: app-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    command: redis-server --requirepass ccutrauser --appendonly yes
+    networks:
+      - app-server-network
+    volumes:
+      - redis-data:/data
   # APP Server
   app-server:
     depends_on:
       - app-db
+      - app-redis
     image: java_springboot:2.6.12
     build:
+      context: .
       dockerfile: Dockerfile
+      args:
+        no_cache: "true"
     ports:
       - "8081:8081"
     #environment:
@@ -35,6 +50,9 @@ services:
       #DATASOURCE_NAME: tra_system
       #DATASOURCE_USERNAME: ccutrauser
       #DATASOURCE_PASSWORD: ccutrauser
+      #SPRING_REDIS_HOST: app-redis
+      #SPRING_REDIS_PORT: 6379
+      #SPRING_REDIS_PASSWORD: ccutrauser
     networks:
       - app-server-network
 
@@ -42,8 +60,17 @@ services:
 # Volume
 volumes:
   mysql-data:
+  redis-data:
 
 # Network
 networks:
   app-server-network:
+
+
+## 啟動時執行  docker-compose up --build
+##而非只有 docker-compose up
+##新增了 --appendonly yes 的指令，啟用 Redis 的 AOF（Append Only File）持久化方式，
+##這會讓 Redis 自動保存資料到本地檔案。同時，我們仍然使用了 redis-data volume，
+##以確保 Redis 資料在容器被刪除時不會遺失。
+
 
