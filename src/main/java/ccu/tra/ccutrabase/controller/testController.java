@@ -25,22 +25,17 @@ public class testController {
     public String addAccount() {
         return "hi ccu-tra-base";
     }
-    @GetMapping("/fff")
-    public String fff() {
-        return "hi ffff";
-    }
-    @ApiOperation(value = "getAccessToken")
-    @GetMapping("/getAccessToken")
-    public TdxAuthorizationPo getAccessToken() {
-
-        return tdxAuthorizationService.getAccessToken();
-    }
 
     @ApiOperation(value = "getAccessTokenFromTdx")
     @GetMapping("/getAccessTokenFromTdx")
     public String getAccessTokenFromTdx() {
-
         return tdxAuthorizationService.getAccessTokenFromTdx();
+    }
+    @ApiOperation(value = "getAccessToken")
+    @GetMapping("/getAccessToken")
+    public String getAccessToken() {
+
+        return tdxAuthorizationService.getAccessToken();
     }
     @GetMapping("/redis/set")
     public String set() {

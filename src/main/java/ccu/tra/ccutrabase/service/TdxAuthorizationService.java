@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 public interface TdxAuthorizationService extends IService<TdxAuthorizationPo> {
 
-    TdxAuthorizationPo getAccessToken();
+    String getAccessToken();
 
     String getAccessTokenFromTdx();
 }

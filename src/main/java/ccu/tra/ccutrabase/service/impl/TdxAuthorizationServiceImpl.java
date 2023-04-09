@@ -7,6 +7,7 @@ import ccu.tra.ccutrabase.service.TdxAuthorizationService;
 import ccu.tra.ccutrabase.utils.HttpUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.common.util.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,22 +26,18 @@ public class TdxAuthorizationServiceImpl extends ServiceImpl<TdxAuthorizationMap
     @Value("${tdx.client.secret}")
     private String clientSecret;
     @Autowired
+    private RedisUtils redisUtils;
+    @Autowired
     private TdxAuthorizationMapper tdxAuthorizationMapper;
-
-    @Override
-    public TdxAuthorizationPo getAccessToken() {
-        LambdaQueryWrapper<TdxAuthorizationPo> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.orderByDesc(TdxAuthorizationPo::getExpiresDate);
-        TdxAuthorizationPo selectOne = tdxAuthorizationMapper.selectOne(queryWrapper);
-        return selectOne;
-    }
 
     @Override
     public String getAccessTokenFromTdx() {
         String accessToken = HttpUtils.getAccessToken(clientId,clientSecret);
-        Timestamp expireDate = new Timestamp(System.currentTimeMillis()+ Constants.TimestampOfDate.oneDay);
-        tdxAuthorizationMapper.insert(TdxAuthorizationPo.builder().accessToken(accessToken).expiresDate(expireDate).build());
+        redisUtils.set("accessToken",accessToken,Constants.TimestampOfDate.oneDay);
         return accessToken;
     }
-
+    @Override
+    public String getAccessToken() {
+        return redisUtils.get("accessToken");
+    }
 }

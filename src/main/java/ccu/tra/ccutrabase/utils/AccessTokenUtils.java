@@ -27,13 +27,11 @@ public class AccessTokenUtils {
 
     public String getAccessToken(){
         // getAccessToken
-        TdxAuthorizationPo tdxAuthorizationPo = tdxAuthorizationService.getAccessToken();
-        String accessToken = null;
-        Timestamp now = new Timestamp(System.currentTimeMillis());
-        if(tdxAuthorizationPo.getExpiresDate().after(now)){
-            return tdxAuthorizationPo.getAccessToken();
-        }else{
+        String accessToken = tdxAuthorizationService.getAccessToken();
+        if(accessToken.isEmpty()){
             return tdxAuthorizationService.getAccessTokenFromTdx();
+        }else{
+            return accessToken;
         }
     }
 }
