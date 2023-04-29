@@ -37,17 +37,18 @@ public class testController {
 
         return tdxAuthorizationService.getAccessToken();
     }
+    @ApiOperation(value = "/redis/set")
     @GetMapping("/redis/set")
     public String set() {
         redisUtils.set("key", "value");
         return "success";
     }
-
+    @ApiOperation(value = "/redis/get")
     @GetMapping("/redis/get")
     public Object get() {
         return redisUtils.get("key");
     }
-
+    @ApiOperation(value = "redis/delete")
     @GetMapping("/redis/delete")
     public String delete() {
         redisUtils.delete("key");

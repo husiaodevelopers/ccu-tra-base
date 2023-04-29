@@ -55,6 +55,9 @@ public class HttpUtils {
              InputStream content = response.getEntity().getContent();
              BufferedReader reader = new BufferedReader(new InputStreamReader(content, StandardCharsets.UTF_8))) {
              log.info("ResponseStatus：" + response.getStatusLine().getStatusCode());
+             if(response.getStatusLine().getStatusCode()!=200){
+                 throw new RuntimeException(EntityUtils.toString(response.getEntity()));
+             }
             return EntityUtils.toString(response.getEntity());
         }
     }

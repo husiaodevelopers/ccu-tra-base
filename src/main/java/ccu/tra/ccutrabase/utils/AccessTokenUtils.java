@@ -28,7 +28,7 @@ public class AccessTokenUtils {
     public String getAccessToken(){
         // getAccessToken
         String accessToken = tdxAuthorizationService.getAccessToken();
-        if(accessToken.isEmpty()){
+        if (accessToken == null || accessToken.isEmpty()) {
             return tdxAuthorizationService.getAccessTokenFromTdx();
         }else{
             return accessToken;

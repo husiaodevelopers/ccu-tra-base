@@ -19,13 +19,13 @@ public class DailyTimetableVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @NotNull(message = "起點車站代碼", groups = {DailyTimetableVo.List.class})
-    @JsonProperty(value = "OriginStationID")
+    @JsonProperty(value = "originStationID")
     private String OriginStationID;
     @NotNull(message = "迄點車站代碼", groups = {DailyTimetableVo.List.class})
-    @JsonProperty(value = "DestinationStationID")
+    @JsonProperty(value = "destinationStationID")
     private String DestinationStationID;
     @NotNull(message = "欲查詢的日期(格式: yyyy-MM-dd)", groups = {DailyTimetableVo.List.class})
-    @JsonProperty(value = "TrainDate")
+    @JsonProperty(value = "trainDate")
     private String TrainDate;
 
     /**
