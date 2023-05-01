@@ -1,3 +1,7 @@
+這專案的parent名稱為common-parent，裡面主要放了一些公共程式碼像是enums、redis相關的methods，增加專案可擴展性
+連結如下:https://github.com/husiaodevelopers/common-parent
+
+
 # ccu-tra-base
 這是一個串接了TDX(運輸資料流通服務)裡面API的練習，目前只有針對台鐵實作了指定[日期],[起迄站間]之站間時刻表資料和取得當天所有車次的時刻表資料。
 TDX的網址: https://tdx.transportdata.tw/。
