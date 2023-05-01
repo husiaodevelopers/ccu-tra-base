@@ -10,5 +10,5 @@ TDX的網址: https://tdx.transportdata.tw/。
   ，便會啟動三個服務。
  
  swagger連結如下:
- http://localhost:8081/ccu/tra/swagger-ui/index.html#/test-controller
+ http://localhost:8081/ccu/tra/swagger-ui/index.html#/
 ![image](https://user-images.githubusercontent.com/114802887/235485630-20857fcd-35ea-4495-8d68-256a2da92c82.png)
