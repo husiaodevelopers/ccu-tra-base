@@ -12,3 +12,57 @@ TDX的網址: https://tdx.transportdata.tw/。
  swagger連結如下:
  http://localhost:8081/ccu/tra/swagger-ui/index.html#/
 ![image](https://user-images.githubusercontent.com/114802887/235485630-20857fcd-35ea-4495-8d68-256a2da92c82.png)
+
+api調用範例如下
+http://localhost:8081/ccu/tra/DailyTimetable/queryByODAndTrainDate
+method:POST
+範例:
+request body:
+{
+    "originStationID":"1040",
+    "destinationStationID":"6000",
+    "trainDate":"2023-04-29",
+    "departureStartTime":"2023-04-29 00:20:00",
+    "departureEndTime":"2023-04-29 23:20:00",
+    "top":30,
+    "format":"JSON"
+}
+response:
+{
+    "code": 200,
+    "msg": "成功",
+    "data": [
+        {
+            "trainNo": "402",
+            "startingStationID": "1040",
+            "endingStationID": "5230",
+            "trainTypeID": "1101",
+            "originStationID": "1040",
+            "destinationStationID": "6000",
+            "startingStationNameZh": "樹林",
+            "startingStationNameEn": "Shulin",
+            "endingStationNameZh": "知本",
+            "endingStationNameEn": "Zhiben",
+            "trainTypeNameZh": "太魯閣",
+            "trainTypeNameEn": "Taroko Express",
+            "originStationNameZh": "樹林",
+            "originStationNameEn": "Shulin",
+            "originStationDepartureTime": "05:54",
+            "destinationStationNameZh": "臺東",
+            "destinationStationNameEn": "Taitung",
+            "destinationStationArrivalTime": "10:09"
+        }
+ ],.
+ .
+ .
+    "success": true
+}
+
+參數說明:
+    "originStationID":起點站代號
+    "destinationStationID":終點站代號
+    "trainDate":"2023-04-29":查詢的日期
+    "departureStartTime":欲查詢的開始時間
+    "departureEndTime":欲查詢的結束時間
+我這裡只列出其中一個車次，實際上會把所有符合條件的車次都列出來
+
