@@ -72,5 +72,7 @@ networks:
 ##新增了 --appendonly yes 的指令，啟用 Redis 的 AOF（Append Only File）持久化方式，
 ##這會讓 Redis 自動保存資料到本地檔案。同時，我們仍然使用了 redis-data volume，
 ##以確保 Redis 資料在容器被刪除時不會遺失。
+##docker-compose down 停止 會remove container，但如果有使用了volume來持久化數據
+##那麼數據不會丟失。數據卷會在容器刪除時保留數據，下次啟動容器時可以重新掛載該數據卷，並恢復之前保存的數據。
 
 
